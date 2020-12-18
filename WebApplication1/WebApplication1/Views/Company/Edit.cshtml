@@ -1,0 +1,35 @@
+﻿@model Company
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="row">
+    <div class="col-sm-12">
+        <h2>Edit Company</h2>
+        @using (Html.BeginForm("Edit", "Company", null, FormMethod.Post, true, new { id = "Form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name)
+                @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control", required = "true", minlength = "2", maxlength = "30" } })
+                @Html.ValidationMessageFor(m => m.Name)
+            </div>
+            <a asp-area="" asp-controller="Company" asp-action="Index">
+                <button type="button" class="btn btn-rounded btn-secondary mr-2">
+                    <i class="fas fa-chevron-left pr-2"></i>
+                    Cancel
+                </button>
+            </a>
+            <button type="submit" class="btn btn-rounded btn-primary">
+                <i class="fas fa-check pr-2"></i>
+                Save
+            </button>
+        }
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    $("#Form").validate();
+</script>
+}

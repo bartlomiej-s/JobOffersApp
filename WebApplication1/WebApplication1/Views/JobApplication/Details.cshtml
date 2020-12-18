@@ -1,0 +1,93 @@
+﻿@model JobApplication
+
+@{ ViewBag.Title = "Application";}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="d-flex align-items-center">
+            <div class="pr-3" style="font-size: 25px">
+                <a href="@Url.Action("Details", "JobOffer", new { id = Model.OfferId })">
+                    <i class="fas fa-chevron-circle-left"></i>
+                </a>
+            </div>
+            <h3 class="mb-1" style="padding-top: 1px;">
+                Application for: @Html.ActionLink(Model.Offer.JobTitle, "Details", "JobOffer", new { id = Model.OfferId })
+            </h3>
+        </div>
+    </div>
+    <div class="pt-2">
+        <div>
+            <div class="offer-details">
+                <label>Name:</label>
+                <div class="content">@Model.FirstName @Model.LastName</div>
+
+                <label>Description:</label>
+                <div class="content">@Model.Description</div>
+                <label>Email:</label>
+                <div class="content">@Model.EmailAddress</div>
+
+                <label>Phone::</label>
+                <div class="content">@Model.PhoneNumber</div>
+
+                @if (Model.CvUrl != null)
+                {
+
+                    <label>CV Url:</label>
+                    <div class="content"><a href="@Model.CvUrl">@Model.CvUrl</a></div>
+                }
+
+                @if (Model.DateOfBirth.HasValue)
+                {
+                    <label>Date Of Birth:</label>
+                    <div class="content">@Model.DateOfBirth.Value.ToShortDateString()</div>
+                }
+
+                <div class="pt-4">
+                    <a asp-action="Edit" asp-route-id="@Model.Id">
+                        <button class="btn btn-rounded btn-primary mx-2">
+                            <i class="fas fa-edit pr-2"></i>
+                            Edit
+                        </button>
+                    </a>
+                    <button class="btn btn-rounded btn-danger mx-2"
+                            data-toggle="modal"
+                            data-target="#confirm-delete">
+                        <i class="fas fa-trash-alt pr-2"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Job Application</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="font-weight-bold mb-0">Are you sure you want to delete this?</p>
+                <p class="text-danger mb-0"><small>This action cannot be undone.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-rounded" data-dismiss="modal">
+                    <i class="fas fa-chevron-left pr-2"></i>
+                    Cancel
+                </button>
+                @using (Html.BeginForm("Delete", "JobApplication", new { Model.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-rounded btn-danger">
+                        <i class="fas fa-trash-alt pr-2"></i>
+                        Delete
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApplication1</name>
+    </assembly>
+    <members>
+        <member name="M:WebApplication1.Controllers.CompanyApiController.GetCompanies(System.Int32,System.Int32,System.String)">
+            <summary>
+            Get list of companies
+            </summary>
+            <remarks></remarks>
+            <param name="pageNo">Page number</param>
+            <param name="pageSize">Size of page</param>
+            <param name="searchString">String used to search for companies</param>
+            <returns>CompanyPagingViewModel</returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.CompanyApiController.GetCompany(System.Int32)">
+            <summary>
+            Get one of companies
+            </summary>
+            <remarks>Get for one element</remarks>
+            <param name="id">ID of company</param>
+            <returns>Company</returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.CompanyApiController.PutCompany(System.Int32,WebApplication1.Models.Company)">
+            <summary>
+            Modify company
+            </summary>
+            <remarks></remarks>
+            <param name="id">ID of company</param>
+            <param name="comp">Company</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.CompanyApiController.PostCompany(WebApplication1.Models.Company)">
+            <summary>
+            Create company
+            </summary>
+            <remarks></remarks>
+            <param name="comp">Company</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.CompanyApiController.DeleteCompany(System.Int32)">
+            <summary>
+            Delete company
+            </summary>
+            <remarks></remarks>
+            <param name="id">ID of company</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.JobApplicationApiController.GetJobApplications(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Get list of job applications
+            </summary>
+            <remarks></remarks>
+            <param name="pageNo">Page number</param>
+            <param name="pageSize">Size of page</param>
+            <param name="offer">ID of offer for which application was made</param>
+            <returns>JobApplicationPagingViewModel</returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.JobApplicationApiController.GetJobApplication(System.Int32)">
+            <summary>
+            Get one of job applications
+            </summary>
+            <remarks>Get for one element</remarks>
+            <param name="id">ID of job application</param>
+            <returns>JobApplication</returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.JobApplicationApiController.PutJobApplication(System.Int32,WebApplication1.Models.JobApplication)">
+            <summary>
+            Modify job application
+            </summary>
+            <remarks></remarks>
+            <param name="id">ID of job application</param>
+            <param name="ja">Job application</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.JobApplicationApiController.PostJobApplication(WebApplication1.Models.JobApplication)">
+            <summary>
+            Create job application
+            </summary>
+            <remarks></remarks>
+            <param name="ja">Job application</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.JobApplicationApiController.DeleteJobApplication(System.Int32)">
+            <summary>
+            Delete job application
+            </summary>
+            <remarks></remarks>
+            <param name="id">ID of job application</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.JobOfferApiController.GetJobOffers(System.Int32,System.Int32,System.String)">
+            <summary>
+            Get list of job offers
+            </summary>
+            <remarks></remarks>
+            <param name="pageNo">Page number</param>
+            <param name="pageSize">Size of page</param>
+            <param name="searchString">String used to search for job offers</param>
+            <returns>JobOfferPagingViewModel</returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.JobOfferApiController.GetJobOffer(System.Int32)">
+            <summary>
+            Get one of job offers
+            </summary>
+            <remarks>Get for one element</remarks>
+            <param name="id">ID of job offer</param>
+            <returns>JobOffer</returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.JobOfferApiController.PutJobOffer(System.Int32,WebApplication1.Models.JobOffer)">
+            <summary>
+            Modify job offer
+            </summary>
+            <remarks></remarks>
+            <param name="id">ID of job offer</param>
+            <param name="jo">Job offer</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.JobOfferApiController.PostJobOffer(WebApplication1.Models.JobOffer)">
+            <summary>
+            Create job offer
+            </summary>
+            <remarks></remarks>
+            <param name="jo">Job offer</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication1.Controllers.JobOfferApiController.DeleteJobOffer(System.Int32)">
+            <summary>
+            Delete job offer
+            </summary>
+            <remarks></remarks>
+            <param name="id">ID of job offer</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

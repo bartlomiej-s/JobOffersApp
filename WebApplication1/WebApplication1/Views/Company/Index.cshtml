@@ -1,0 +1,119 @@
+﻿@model IEnumerable<Company>
+
+<div class="row page-box">
+    <div class="col-sm-12">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-12 col-md-4 d-flex align-items-center py-2">
+                    <h3 class="font-weight-bold mb-0">
+                        Company list
+                    </h3>
+                    <div>
+                        <span class="badge badge-pill badge-primary align-top">
+                            @Model.Count()
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 py-2">
+                    @using (Html.BeginForm("Index", "Company", FormMethod.Get))
+                    {
+                        <div class="input-group search-input"
+                             style="border-radius: 20px">
+                            <input name="search"
+                                   id="searchBox"
+                                   type="text"
+                                   class="form-control"
+                                   placeholder="Search by company title.."
+                                   aria-label="Search by company title"
+                                   aria-describedby="button-search">
+                            <div class="input-group-append">
+                                <button id="button-search"
+                                        class="btn btn-primary"
+                                        type="submit"
+                                        onclick="return submitClick();">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-12 col-sm-4 text-right py-2">
+                    <a href="@Url.Action("Create", "Company")">
+                        <button class="btn btn-rounded btn-outline-primary"
+                                data-toggle="modal">
+                            <i class="fa fa-plus pr-3"></i>
+                            Add Company
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="updatePanel">
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+        var currentPage = 1;
+        $(document).ready(function () {
+            fetchData(1);
+        });
+        function fetchData(pageNo) {
+            var $loading = "<div class='loading'>Please wait...</div>";
+            $('#updatePanel').prepend($loading);
+            var $addr = '/api/CompanyApi';
+            if (document.getElementById("searchBox").value) $addr = $addr + '?search=' + document.getElementById("searchBox").value;
+            $.ajax({
+                url: $addr,
+                type: 'GET',
+                data: { pageNo: pageNo },
+                dataType: 'json',
+                success: function (data) {
+                    var $table = $('<table/>').addClass('table table-striped table-hover');
+                    var $header = $('<thead/>').html('<tr><th><span class="custom-checkbox"><input type="checkbox" id="selectAll" onclick="eventCheckBox()"><label for="selectAll"></label></span></th><th scope="col">Name</th></tr >');
+                    $table.append($header);
+                    $.each(data.companies, function (i, company) {
+                        var $row = $('<tr/>');
+                        $row.append($('<td/>').html('<span class= "custom-checkbox"><input type="checkbox" id="checkbox1" name="options[]" value="1"><label for="checkbox1"></label></span>'));
+                        $row.append($('<td/>').html(company.name));
+                        var $url = '@Html.Raw(@Url.Action("Edit", "Company", new { id = -1 }))';
+                        $url = $url.replace("-1", company.id);
+                        var $del = '@using (Html.BeginForm("Delete", "Company", new { id = -1 }, FormMethod.Post, null, new { style = "display:inline;" })){@Html.AntiForgeryToken()<button type="submit" class="close" data-dismiss="modal" aria-label="Delete"><span aria-hidden="true" style="color:red">&times;</span></button>}';
+                        $del = $del.replace("-1", company.id);
+                        $row.append($('<td/>').attr('align', 'right').html('<a href="' + $url + '"class="text-primary"><i class="fas fa-edit"title="Edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;' + $del));
+                        $table.append($row);
+                    });
+
+                    var totalPage = parseInt(data.totalPage);
+                    var $footer = $('<tr/>');
+                    var $footerTD = $('<td/>').attr('colspan', 4).addClass('footerContent');
+                    currentPage = pageNo;
+                    if (totalPage > 0) {
+                        for (var i = 1; i <= totalPage; i++) {
+                            var $page = $('<span/>').addClass((i == currentPage) ? "current" : "");
+                            $page.html((i == currentPage) ? i : "<button onclick='fetchData(" + i + ");'>" + i + "</button>");
+                            $footerTD.append($page);
+                        }
+                        $footer.append($footerTD);
+                    }
+                    $table.append($footer);
+
+                    $('#updatePanel').html($table);
+                },
+                error: function () {
+                    alert('Error! Please try again.');
+                }
+            }).done(function () {
+
+                $loading.remove();
+            });
+        }
+        function submitClick() {
+            event.preventDefault();
+            fetchData(1);
+            return true;
+        }
+</script>
+}

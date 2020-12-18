@@ -1,0 +1,23 @@
+{
+  "name": "WebApplication1",
+  "authors": [
+    "Bartek"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "knockout": "knockoutjs#v3.5.1"
+  },
+  "resolutions": {
+    "knockout": "v3.5.1"
+  }
+}

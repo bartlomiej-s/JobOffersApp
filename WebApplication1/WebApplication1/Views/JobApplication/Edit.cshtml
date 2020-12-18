@@ -1,0 +1,49 @@
+﻿@model JobApplication
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="row">
+    <div class="col-sm-12">
+        @using (Html.BeginForm("Edit", "JobApplication", null, FormMethod.Post, true, new { id = "Form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            <div class="form-group">
+                @Html.LabelFor(m => m.PhoneNumber)
+                @Html.EditorFor(m => m.PhoneNumber, new { htmlAttributes = new { @class = "form-control", type = "tel", minlength = "9", maxlength = "9", digits = "true", pattern = "^[0-9]*$", title = "Proszę wprowadzić wyłącznie cyfry" } })
+                @Html.ValidationMessageFor(m => m.PhoneNumber)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.EmailAddress)
+                @Html.EditorFor(m => m.EmailAddress, new { htmlAttributes = new { @class = "form-control", type = "email", minlength = "5", maxlength = "50", email = "true", pattern = "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$", title = "Proszę wprowadzić poprawny adres email" } })
+                @Html.ValidationMessageFor(m => m.EmailAddress, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.CvUrl)
+                @Html.EditorFor(m => m.CvUrl, new { htmlAttributes = new { @class = "form-control", type = "url", minlength = "3", maxlength = "100", url = "true" } })
+                @Html.ValidationMessageFor(m => m.CvUrl, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Description)
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Enter description", minlength = "5", maxlength = "1000" })
+                @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+            </div>
+            <a asp-area="" asp-controller="JobApplication" asp-action="Details" asp-route-id="@Model.Id">
+                <button type="button" class="btn btn-rounded btn-secondary mr-2">
+                    <i class="fas fa-chevron-left pr-2"></i>
+                    Cancel
+                </button>
+            </a>
+            <button type="submit" class="btn btn-rounded btn-primary">
+                <i class="fas fa-check pr-2"></i>
+                Save
+            </button>
+        }
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    $("#Form").validate();
+</script>
+}

@@ -1,0 +1,181 @@
+﻿@model JobOffer
+
+@{ ViewBag.Title = "Offer";}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="d-flex align-items-center">
+            <div class="pr-3" style="font-size: 25px">
+                <a href="@Url.Action("Index", "JobOffer")">
+                    <i class="fas fa-chevron-circle-left"></i>
+                </a>
+            </div>
+            <h3 class="mb-1" style="padding-top: 1px;">
+                Details
+            </h3>
+        </div>
+    </div>
+    <div class="pt-2">
+        <div>
+            <div class="offer-details">
+                <h4 class="mb-0 mt-2">@Model.JobTitle</h4>
+
+                <label>Description:</label>
+                <div class="content">@Model.Description</div>
+                <label>Company:</label>
+                <div class="content">@Model.Company.Name</div>
+
+                <label>Location:</label>
+                <div class="content">@Model.Location</div>
+
+                @if (Model.SalaryFrom.HasValue)
+                {
+                    <label>Salary from:</label>
+                    <div class="content">@Model.SalaryFrom  (PLN)</div>
+                }
+
+                @if (Model.SalaryTo.HasValue)
+                {
+                    <label>Salary to:</label>
+                    <div class="content">@Model.SalaryTo (PLN)</div>
+                }
+
+                <label>Created:</label>
+                <div class="content">@Model.Created</div>
+
+                @if (Model.ValidUntil.HasValue)
+                {
+                    <div>
+                        <label>Valid:</label>
+                        <div class="content">
+                            @Model.ValidUntil.Value.Subtract(DateTime.Now).Days days (@Model.ValidUntil)
+                        </div>
+                    </div>
+                }
+                <div class="pt-4">
+                    <a asp-action="Apply" asp-controller="JobApplication" asp-route-id="@Model.Id">
+                        <button class="btn btn-rounded btn-primary mx-2">
+                            <i class="fas fa-edit pr-2"></i>
+                            Apply Now
+                        </button>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id">
+                        <button class="btn btn-rounded btn-primary mx-2">
+                            <i class="fas fa-edit pr-2"></i>
+                            Edit
+                        </button>
+                    </a>
+                    <button class="btn btn-rounded btn-danger mx-2"
+                            data-toggle="modal"
+                            data-target="#confirm-delete">
+                        <i class="fas fa-trash-alt pr-2"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div>
+            <h4 class="mb-1" style="margin: 0 5px;">Applications</h4>
+            <div id="updatePanel">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Job Offer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="font-weight-bold mb-0">Are you sure you want to delete this?</p>
+                <p class="text-danger mb-0"><small>This action cannot be undone.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-rounded" data-dismiss="modal">
+                    <i class="fas fa-chevron-left pr-2"></i>
+                    Cancel
+                </button>
+                @using (Html.BeginForm("Delete", "JobOffer", new { Model.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-rounded btn-danger">
+                        <i class="fas fa-trash-alt pr-2"></i>
+                        Delete
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var currentPage = 1;
+        $(document).ready(function () {
+            fetchData(1);
+        });
+        function fetchData(pageNo) {
+            var $loading = "<div class='loading'>Please wait...</div>";
+            $('#updatePanel').prepend($loading);
+            var $addr = '/api/JobApplicationApi';
+            $addr = $addr + '?offer=' + @Model.Id;
+            $.ajax({
+                url: $addr,
+                type: 'GET',
+                data: { pageNo: pageNo },
+                async: true,
+                dataType: 'json',
+                success: function (data) {
+                    var $table = $('<table/>').addClass('table table-striped table-hover');
+                    $table.attr('style', 'table-layout: fixed');
+                    var $header = $('<thead/>').html('<tr><th scope="col" style="width: 100%">Name</th><th scope="col" style="width: 100%">Email</th><th scope="col" style="width: 100%">Phone</th><th style="width: 100px"></th></tr>');
+                    $table.append($header);
+                    var $body = $('<tbody/>');
+                    $.each(data.jobApplications, function (i, application) {
+                        var $row = $('<tr/>');
+                        var $name = '@Html.Raw(@Url.Action("Details", "JobApplication", new { id = -1 }))';
+                        $name = $name.replace("-1", application.id);
+                        $row.append($('<td/>').html('<a href="' + $name + '">' + application.firstName + " " + application.lastName + '</a>'));
+                        $row.append($('<td/>').html(application.emailAddress));
+                        $row.append($('<td/>').html(application.phoneNumber));
+                        var $url = '@Html.Raw(@Url.Action("Edit", "JobApplication", new { id = -1 }))';
+                        $url = $url.replace("-1", application.id);
+                        var $del = '@using (Html.BeginForm("Delete", "JobApplication", new { id = -1 }, FormMethod.Post, null, new { style = "display:inline;" })){@Html.AntiForgeryToken()<button type="submit" class="close" data-dismiss="modal" aria-label="Delete"><span aria-hidden="true" style="color:red">&times;</span></button>}';
+                        $del = $del.replace("-1", application.id);
+                        $row.append($('<td/>').attr('align', 'right').attr('width','100px').html('<a href="' + $url + '"class="text-primary"><i class="fas fa-edit"title="Edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;' + $del));
+                        $body.append($row);
+                    });
+                    $table.append($body);
+
+                    var totalPage = parseInt(data.totalPage);
+                    var $footer = $('<tr/>');
+                    var $footerTD = $('<td/>').attr('colspan', 4).addClass('footerContent');
+                    currentPage = pageNo;
+                    if (totalPage > 0) {
+                        for (var i = 1; i <= totalPage; i++) {
+                            var $page = $('<span/>').addClass((i == currentPage) ? "current" : "");
+                            $page.html((i == currentPage) ? i : "<button onclick='fetchData(" + i + ");'>" + i + "</button>");
+                            $footerTD.append($page);
+                        }
+                        $footer.append($footerTD);
+                    }
+                    $table.append($footer);
+
+                    $('#updatePanel').html($table);
+                },
+                error: function () {
+                    alert('Error! Please try again.');
+                }
+            }).done(function () {
+
+                $loading.remove();
+            });
+        }
+    </script>
+}
